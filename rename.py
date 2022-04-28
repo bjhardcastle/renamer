@@ -12,10 +12,10 @@ from typing import Tuple
 # define some globals here for visibility:
 
 # starting dir in case folder select gui is opened - need not exist
-initial_gui_dir = r"\\W10DTSM112719\neuropixels_data"
+DEFAULT_RENAME_ROOT = r"\\W10DTSM112719\neuropixels_data"
 
 # path substrings to exclude from contents renaming - need not be exhaustive, can just save time instead of trying to open large non-text file
-skip_content_edit_list = [".mp4", ".png", "motor-locs.csv", ".pkl"]
+SKIP_CONTENT_EDIT_LIST = [".mp4", ".png", ".pkl", "motor-locs.csv"]
 
 def parse_args() -> Tuple[str,str,str]:
     # parse input arguments and add helpful info
@@ -43,7 +43,7 @@ def main(rename_folder=None, old_str=None, new_str=None):
 
         # win1 = tk.Toplevel()
         # win1.withdraw()
-        rename_folder = askdirectory(initialdir=initial_gui_dir, title="Choose folder to rename",)
+        rename_folder = askdirectory(initialdir=DEFAULT_RENAME_ROOT, title="Choose folder to rename",)
         # win1.quit()
         # root.destroy()
         if not rename_folder:
@@ -94,7 +94,7 @@ def rename_by_copy(old_str, new_str, old_dir, recursive=True, copy_nontext_files
             Path(new_path).parents[0].mkdir(parents=True, exist_ok=True)
             try:
                 already_copied = False
-                if not any([sub in new_path for sub in skip_content_edit_list]):
+                if not any([sub in new_path for sub in SKIP_CONTENT_EDIT_LIST]):
                     # skip some large files
                     with open(old_path, "rt") as file:
                         x = file.read()
