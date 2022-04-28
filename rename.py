@@ -63,6 +63,8 @@ def main(rename_folder=None, old_str=None, new_str=None):
     new_dir = rename_by_copy(old_str, new_str, rename_folder, recursive=True, copy_nontext_files=True)
 
     # if any parts of newstring and oldstring are the same, extract out the substring(s) which changed and run again to replace isolated instanced
+    # this implementation assumes that the number of seperators in the string is consistent between new and old: should make sure this is the case,
+    # else bad things could happen
     seperators_exp = "_+|-+|\s+|\.+"
     old_substr = re.split(seperators_exp, old_str)
     new_substr = re.split(seperators_exp, new_str)
@@ -127,9 +129,9 @@ def check_before_overwrite_dialog(path):
         win3.quit()  # exit gui and continue
 
     win3 = tk.Toplevel()
-    label = tk.Label(win3, text="Contents may be overwritten:").grid(row=0, column=0)
-    button_1 = tk.Button(win3, text="Cancel", command=b1_callback).grid(row=1, column=0)
-    button_2 = tk.Button(win3, text="Continue", command=b2_callback).grid(row=1, column=1)
+    label = tk.Label(win3, text="Contents may be overwritten:").grid(row=0, column=0, columnspan=2, sticky=tk.EW, padx=5, pady=5)
+    button_1 = tk.Button(win3, text="Cancel", command=b1_callback).grid(row=1, column=0, sticky=tk.EW, padx=5, pady=5)
+    button_2 = tk.Button(win3, text="Continue", command=b2_callback).grid(row=1, column=1, sticky=tk.EW, padx=5, pady=5)
     # button_2.pack()
     win3.title("Folder exists")
     win3.mainloop()
@@ -149,11 +151,11 @@ def replace_substr_dialog(suggest_old="", suggest_new="") -> (str, str):
     old_str.set(suggest_old)
     new_str = tk.StringVar()
     new_str.set(suggest_new)
-    old_label = tk.Label(win2, text="old string").grid(row=0, column=0)
-    new_label = tk.Label(win2, text="new string").grid(row=1, column=0)
-    old_entry = tk.Entry(win2, textvariable=old_str, width=30).grid(row=0, column=1)
-    new_entry = tk.Entry(win2, textvariable=new_str, width=30).grid(row=1, column=1)
-    old_button = tk.Button(win2, text="Replace", command=win2.quit).grid(row=1, column=2)
+    old_label = tk.Label(win2, text="old string").grid(row=0, column=0, sticky=tk.EW, padx=5, pady=5)
+    new_label = tk.Label(win2, text="new string").grid(row=1, column=0, sticky=tk.EW, padx=5, pady=5)
+    old_entry = tk.Entry(win2, textvariable=old_str, width=30).grid(row=0, column=1, sticky=tk.EW, padx=5, pady=5)
+    new_entry = tk.Entry(win2, textvariable=new_str, width=30).grid(row=1, column=1, sticky=tk.EW, padx=5, pady=5)
+    done_button = tk.Button(win2, text="Replace", command=win2.quit).grid(row=1, column=2, sticky=tk.EW, padx=5, pady=5)
     win2.bind("<Return>", lambda event: win2.quit())
     win2.title("Enter substring in path to replace")
     win2.mainloop()
