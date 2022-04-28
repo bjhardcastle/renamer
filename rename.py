@@ -7,6 +7,7 @@ import time
 import tkinter as tk
 from pathlib import Path
 from tkinter.filedialog import askdirectory
+from typing import Tuple
 
 # define some globals here for visibility:
 
@@ -16,8 +17,7 @@ initial_gui_dir = r"\\W10DTSM112719\neuropixels_data"
 # path substrings to exclude from contents renaming - need not be exhaustive, can just save time instead of trying to open large non-text file
 skip_content_edit_list = [".mp4", ".png", "motor-locs.csv", ".pkl"]
 
-
-def parse_args():
+def parse_args() -> Tuple[str,str,str]:
     # parse input arguments and add helpful info
     parser = argparse.ArgumentParser(
         description="Find and replace in the names and content of files and their folders non-destructively: new folder is created with renamed contents, original folder is preserved. Intended for changing mouseID or sessionID in \\neuropixels_data. "
@@ -138,7 +138,7 @@ def check_before_overwrite_dialog(path):
     return None
 
 
-def replace_substr_dialog(suggest_old="", suggest_new="") -> (str, str):
+def replace_substr_dialog(suggest_old="", suggest_new="") -> Tuple[str, str]:
     """ open dialog box, ask user old string to find in filepaths and replace with new string """
 
     if suggest_old + suggest_new == suggest_old:  # old str suggested, but not new
