@@ -103,15 +103,15 @@ def rename_by_copy(old_str, new_str, old_dir, recursive=True, copy_nontext_files
                         file.write(x)
                         skip = True
             except UnicodeDecodeError:
-                continue
+                pass
             finally:
                 if copy_nontext_files and not already_copied:
                     try:
                         shutil.copy2(old_path, new_path)  # copy with created/modified times preserved
                     except shutil.SameFileError:
-                        continue
+                        pass
                     except PermissionError:
-                        continue
+                        pass
 
         elif not Path(new_path).suffix:
             Path(new_path).mkdir(parents=True, exist_ok=True)

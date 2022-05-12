@@ -10,7 +10,7 @@ from tkinter.filedialog import askopenfilenames, askdirectory
 import logging
 
 LOG_FILENAME = 'filecopy.log'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO,
+logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(module)s - %(funcName)s: %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',)
 
@@ -53,13 +53,13 @@ def main(rename_folder=None, old_str=None, new_str=None):
     start_time = int(jdata['workflow_start_time'][:12])
     end_time = int(jdata['platform_json_save_time'][:12])  # ! correct?
 
-    ## auto find img and pkl files created during experiment
+    # auto find img and pkl files created during experiment
     pkl_path_list = get_files_created_between(
         pkl_output_dir, "*.pkl", start_time, end_time)
     # img_path_list = get_files_created_between(
     #     img_output_dir, "*", start_time, end_time)
 
-    ## manual choose img and pkl files
+    # manual choose img and pkl files
     # pkl_path_list = askopenfilenames(filetypes=(("pkl file", "*.pkl"), ("All files", "*.*")), initialdir=pkl_output_dir, title="Choose pkl files")
     img_path_list = askopenfilenames(filetypes=[
         ("image files", "*.png"),
@@ -120,9 +120,6 @@ def main(rename_folder=None, old_str=None, new_str=None):
             else:
                 print(f"\n{Path(orig_path).name}\n->{new_path}")
 
-    print("\nFile transfer complete. Check log for files copied.\n")
-    os.startfile(exp_folder_obj)
-
 
 def get_created_timestamp_from_file(file, date_format='%Y%m%d%H%M'):
 
@@ -151,7 +148,7 @@ def progressbar(it, prefix="", size=60, file=sys.stdout):
     count = len(it)
 
     def show(j):
-        x = int(size * j / count)
+        x = int(size * j / (count if count != 0 else 1))
         file.write("%s[%s%s] %i/%i\r" %
                    (prefix, "#" * x, "." * (size - x), j, count))
         file.flush()
@@ -168,3 +165,4 @@ if __name__ == "__main__":
     args = []  # parse_args()
     main(*args)
     # sys.exit()
+    print("Finished. Check log for files copied")
